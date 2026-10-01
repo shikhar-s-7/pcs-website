@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { useDrawOn } from "@/components/diagrams/useDrawOn";
+import { useDrawOn } from "@/hooks/useReveal";
 
 type Point = [number, number];
 
@@ -15,6 +15,9 @@ type TopoContoursProps = {
   /** Set color through text-*; keep it low contrast. */
   className?: string;
   drawOn?: boolean;
+  strokeWidth?: number;
+  /** Every Nth contour is drawn 1.5x heavier. 0 = all equal. */
+  emphasisEvery?: number;
 };
 
 /** mulberry32. Small, fast, deterministic. */
@@ -165,6 +168,8 @@ export function TopoContours({
   height = 800,
   className,
   drawOn = true,
+  strokeWidth = 1,
+  emphasisEvery = 0,
 }: TopoContoursProps) {
   const ref = useRef<SVGSVGElement>(null);
   const paths = useMemo(() => contours(seed, levels, width, height), [seed, levels, width, height]);
@@ -178,9 +183,14 @@ export function TopoContours({
       className={className}
       aria-hidden="true"
     >
-      <g fill="none" stroke="currentColor" strokeWidth="1" vectorEffect="non-scaling-stroke">
+      <g fill="none" stroke="currentColor" strokeWidth={strokeWidth} vectorEffect="non-scaling-stroke">
         {paths.map((d, index) => (
-          <path key={index} data-draw d={d} />
+          <path
+            key={index}
+            data-draw
+            d={d}
+            strokeWidth={emphasisEvery > 0 && (index + 1) % emphasisEvery === 0 ? strokeWidth * 1.5 : undefined}
+          />
         ))}
       </g>
     </svg>

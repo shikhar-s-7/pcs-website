@@ -1,10 +1,11 @@
-/** In-page sections on /capabilities, in document order. */
+/** Header and menu items, in order. Hashes are in-page sections on /capabilities. */
 export const nav = [
   { href: "/capabilities#overview", label: "Overview" },
   { href: "/capabilities#capabilities", label: "Capabilities" },
   { href: "/capabilities#pcs", label: "PCS" },
   { href: "/capabilities#compliance", label: "Compliance" },
   { href: "/capabilities#dispatch", label: "Dispatch" },
+  { href: "/technology", label: "Technology" },
 ] as const;
 
 export const cta = { href: "/enquiries", label: "Start a project" } as const;

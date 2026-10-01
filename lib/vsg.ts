@@ -32,7 +32,7 @@ export const OMEGA0 = 2 * Math.PI * F0;
 const PMAX = 1.2;
 const PM = 0.5;
 const T_END = 20;
-const T_STEP = 2;
+export const T_STEP = 2;
 const DT = 0.001;
 const SAMPLE = 0.02;
 

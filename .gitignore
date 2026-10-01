@@ -1,4 +1,19 @@
+# dependencies
 node_modules
+
+# next
 .next
 out
 *.tsbuildinfo
+next-env.d.ts
+
+# env: real values never committed
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# misc
+.DS_Store
+npm-debug.log*

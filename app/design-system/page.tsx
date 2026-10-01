@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { ControlBlockDiagram, SingleLineDiagram, TopoContours } from "@/components/diagrams";
 import { Frame } from "@/components/Frame";
@@ -8,6 +9,7 @@ import { specs, type Spec } from "@/content/specs";
 
 export const metadata: Metadata = {
   title: "Design system",
+  robots: { index: false, follow: false },
 };
 
 const heroIds = ["hero-scr", "hero-ambient", "hero-block", "hero-mode"] as const;
@@ -125,6 +127,8 @@ function Band({
 }
 
 export default function DesignSystemPage() {
+  // Internal specimen. Not served in production.
+  if (process.env.NODE_ENV === "production") notFound();
   return (
     <main id="content" tabIndex={-1}>
       <Band index="01" label="TYPE" id="type">

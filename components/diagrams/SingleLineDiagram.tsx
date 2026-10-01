@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { ACCENT, MONO, stroke } from "@/components/diagrams/svg";
-import { useDrawOn } from "@/components/diagrams/useDrawOn";
+import { useDrawOn } from "@/hooks/useReveal";
 
 type Stage = "dc" | "pcs" | "transformer" | "grid";
 
@@ -21,9 +21,12 @@ export function SingleLineDiagram({ highlight = "pcs", className }: SingleLineDi
   const tone = (stage: Stage) => (stage === highlight ? ACCENT : "currentColor");
 
   return (
+    <div className="@container">
     <svg
       ref={ref}
       viewBox="0 0 800 200"
+      preserveAspectRatio="xMidYMid meet"
+      style={{ width: "100%", height: "auto", display: "block" }}
       className={className}
       role="img"
       aria-label="Single-line diagram: DC source, PCS, transformer, grid"
@@ -60,7 +63,8 @@ export function SingleLineDiagram({ highlight = "pcs", className }: SingleLineDi
         </g>
       </g>
 
-      <g fontFamily={MONO} fontSize="11" letterSpacing="1.5" fill="var(--muted)">
+      {/* wide container */}
+      <g className="hidden @[720px]:block" fontFamily={MONO} fontSize="12" letterSpacing="1.5" fill="var(--muted)">
         <text data-label x="74" y={LABEL_Y} textAnchor="middle">DC SOURCE</text>
         <text data-label x="280" y={LABEL_Y} textAnchor="middle">PCS</text>
         <text data-label x="486" y={LABEL_Y} textAnchor="middle">TRANSFORMER</text>
@@ -68,6 +72,16 @@ export function SingleLineDiagram({ highlight = "pcs", className }: SingleLineDi
         <text data-label x="164" y="90" textAnchor="middle">DC</text>
         <text data-label x="393" y="90" textAnchor="middle">AC</text>
       </g>
-    </svg>
+
+      {/* narrow container: the drawing is about 0.4x, so larger text and shorter labels */}
+      <g className="@[720px]:hidden" fontFamily={MONO} fontSize="30" fill="var(--muted)">
+        <text data-label x="74" y={LABEL_Y} textAnchor="middle">SOURCE</text>
+        <text data-label x="280" y={LABEL_Y} textAnchor="middle">PCS</text>
+        <text data-label x="486" y={LABEL_Y} textAnchor="middle">XFMR</text>
+        <text data-label x="688" y={LABEL_Y} textAnchor="middle">GRID</text>
+        <text data-label x="164" y="86" textAnchor="middle">DC</text>
+        <text data-label x="393" y="86" textAnchor="middle">AC</text>
+      </g>    </svg>
+    </div>
   );
 }

@@ -3,8 +3,7 @@ VSG-enabled power conversion systems (PCS). Audience: utility/microgrid engineer
 EPCs, investors.
 
 STACK: Next.js App Router, TypeScript, Tailwind, GSAP + ScrollTrigger,
-react-three-fiber/drei (one 3D object only), static export (output:'export'),
-deployed to Surge. No server-only features.
+react-three-fiber/drei (one 3D object only), deployed to Vercel.
 
 CONTENT: All copy, numbers, specs and claims come from /content (extracted from the
 company's existing site). Display them exactly as given: same values, same units.

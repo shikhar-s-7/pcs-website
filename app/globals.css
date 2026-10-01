@@ -16,17 +16,11 @@
   --color-signal: #ff4d00;
   --color-signal-on-paper: #b83500;
 
-  --color-fg: var(--fg);
-  --color-muted: var(--muted);
-  --color-line: var(--line);
-  --color-ground: var(--ground);
-  --color-signal-text: var(--signal-text);
-
   --font-display: var(--font-barlow-condensed), "Arial Narrow", sans-serif;
   --font-sans: var(--font-archivo), Arial, sans-serif;
   --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
 
-  --text-display: clamp(3.25rem, 8vw, 6.75rem);
+  --text-display: clamp(2.75rem, 1.75rem + 5.2vw, 6.75rem);
   --text-display--line-height: 0.84;
   --text-display--letter-spacing: -0.02em;
   --text-display--font-weight: 500;
@@ -45,10 +39,10 @@
   --text-body--line-height: 1.55;
   --text-body--font-weight: 400;
 
-  --text-small: 0.9375rem;
+  --text-small: 1rem;
   --text-small--line-height: 1.45;
 
-  --text-label: 0.6875rem;
+  --text-label: 0.75rem;
   --text-label--line-height: 1.35;
   --text-label--letter-spacing: 0.14em;
   --text-label--font-weight: 500;
@@ -58,13 +52,55 @@
   --text-data--letter-spacing: -0.03em;
   --text-data--font-weight: 500;
 
+  /* Stat rows. Long values (dates, ranges) step down so they fit a quarter column. */
+  --text-stat: clamp(2.25rem, 5.4vw, 5rem);
+  --text-stat--line-height: 0.9;
+  --text-stat--letter-spacing: -0.05em;
+  --text-stat--font-weight: 500;
+
+  --text-stat-long: clamp(1.5rem, 3.6vw, 3.25rem);
+  --text-stat-long--line-height: 0.95;
+  --text-stat-long--letter-spacing: -0.04em;
+  --text-stat-long--font-weight: 500;
+
   --radius-sm: 2px;
   --radius-md: 2px;
   --radius-lg: 2px;
 }
 
+/* inline: utilities read var(--muted) where used, so .ground-paper can override it. */
+@theme inline {
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-ground: var(--ground);
+  --color-signal-text: var(--signal-text);
+}
+
+/* Header bar height per breakpoint. --header-h adds the notch inset, so anchors, the menu
+   overlay and sticky offsets all clear the real header. */
 :root {
-  --header-h: 3.75rem;
+  --header-bar: 3.5rem;
+  --header-h: calc(var(--header-bar) + env(safe-area-inset-top, 0px));
+}
+
+@media (min-width: 768px) {
+  :root {
+    --header-bar: 3.75rem;
+  }
+}
+
+/* Page gutter. Never under a landscape notch. */
+.gutter {
+  padding-inline: max(1.25rem, env(safe-area-inset-left, 0px))
+    max(1.25rem, env(safe-area-inset-right, 0px));
+}
+
+@media (min-width: 768px) {
+  .gutter {
+    padding-inline: max(2rem, env(safe-area-inset-left, 0px))
+      max(2rem, env(safe-area-inset-right, 0px));
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -77,6 +113,23 @@
   html {
     background: var(--color-ink);
     color-scheme: dark;
+  }
+
+  /* Backstop only. Overflow sources are fixed where they start. clip keeps sticky working. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
+  /* No 300ms tap delay, no double-tap zoom on controls. */
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  label,
+  summary {
+    touch-action: manipulation;
   }
 
   body {
@@ -169,7 +222,7 @@
     border: 1px solid transparent;
     border-radius: 2px;
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.14em;
     line-height: 1;
@@ -185,20 +238,38 @@
     color: var(--color-ink);
   }
 
-  .btn-signal:hover {
-    background: var(--fg);
-    color: var(--ground);
-  }
-
   .btn-line {
     background: transparent;
     color: var(--fg);
     border-color: var(--line);
   }
 
-  .btn-line:hover {
+  /* Hover is a pointer-only cue. Touch gets the :active press instead of a stuck hover. */
+  @media (hover: hover) {
+    .btn-signal:hover {
+      background: var(--fg);
+      color: var(--ground);
+    }
+
+    .btn-line:hover {
+      border-color: var(--signal-text);
+      color: var(--signal-text);
+    }
+  }
+
+  .btn-signal:active {
+    background: var(--fg);
+    color: var(--ground);
+  }
+
+  .btn-line:active {
     border-color: var(--signal-text);
     color: var(--signal-text);
+  }
+
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 
   .text-link {
@@ -216,7 +287,7 @@
     gap: 0.45rem;
     color: var(--muted);
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.14em;
     line-height: 1.35;
@@ -227,6 +298,7 @@
   .field select,
   .field textarea {
     width: 100%;
+    min-height: 3rem;
     border: 0;
     border-bottom: 1px solid var(--line);
     border-radius: 0;
@@ -286,36 +358,105 @@
     margin-top: 1rem;
   }
 
+  /* Below md: label above value, one hairline between rows. md and up: 4 / 8 columns. */
   .spec-table tbody tr {
     display: grid;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-    align-items: center;
-    min-height: 52px;
+    grid-template-columns: minmax(0, 1fr);
     border-bottom: 1px solid var(--line);
+    padding: 0.75rem 0;
   }
 
   .spec-table th,
   .spec-table td {
     min-width: 0;
-    padding: 0.75rem 1rem 0.75rem 0;
+    padding: 0;
     text-align: left;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
   }
 
   .spec-table th {
     color: var(--muted);
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 400;
     line-height: 1.4;
   }
 
   .spec-table td {
+    margin-top: 0.25rem;
     font-family: var(--font-mono);
-    font-size: 15px;
+    font-size: 1rem;
     font-weight: 400;
     line-height: 1.4;
     font-variant-numeric: tabular-nums;
+  }
+
+  .spec-table--reference th {
+    color: var(--fg);
+    font-family: var(--font-mono);
+  }
+
+  .spec-table--reference td {
+    color: var(--muted);
+    font-family: var(--font-sans);
+  }
+
+  @media (min-width: 768px) {
+    .spec-table tbody tr {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      align-items: center;
+      min-height: 52px;
+      padding: 0;
+    }
+
+    .spec-table th,
+    .spec-table td {
+      padding: 0.75rem 1rem 0.75rem 0;
+    }
+
+    .spec-table td {
+      margin-top: 0;
+      font-size: 15px;
+    }
+
+    .spec-table th {
+      font-size: 14px;
+    }
+
+    .spec-table--reference th,
+    .spec-table--reference td {
+      font-size: 15px;
+    }
+  }
+}
+
+/* Hero contours fade to nothing behind the simulation plate. Stacked: bottom. Side by side: right. */
+.hero-topo {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 38%, transparent 58%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 38%, transparent 58%);
+}
+
+@media (min-width: 768px) {
+  .hero-topo {
+    -webkit-mask-image: radial-gradient(
+      ellipse 36% 62% at 76% 50%,
+      transparent 0%,
+      transparent 62%,
+      #000 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 36% 62% at 76% 50%,
+      transparent 0%,
+      transparent 62%,
+      #000 100%
+    );
+  }
+}
+
+/* Pre-hide so split text does not flash. Only when motion is allowed; JS reveals it. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    visibility: hidden;
   }
 }
 
@@ -335,12 +476,15 @@
   background: var(--color-ink);
   color: var(--color-paper);
   border-bottom: 1px solid var(--color-graphite);
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
+/* 44px minimum hit area, 8px gaps come from the lists that hold them. */
 .nav-link {
+  min-height: 2.75rem;
   color: inherit;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.14em;
   line-height: 1.35;
@@ -360,7 +504,10 @@
   flex-direction: column;
   background: var(--color-ink);
   color: var(--color-paper);
-  padding: 1.5rem 1.25rem 2rem;
+  padding: 1.5rem max(1.25rem, env(safe-area-inset-right, 0px))
+    max(2rem, env(safe-area-inset-bottom, 0px)) max(1.25rem, env(safe-area-inset-left, 0px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .skip-link {
@@ -374,7 +521,7 @@
   padding: 0.75rem 1rem;
   border-radius: 2px;
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.14em;
   line-height: 1;
@@ -389,9 +536,10 @@
 .hw-slider {
   appearance: none;
   width: 100%;
-  height: 1.25rem;
+  height: 2.75rem; /* 44px row; the whole row is the touch target */
   background: transparent;
   cursor: pointer;
+  touch-action: none; /* thumb drags; the page does not scroll under the finger */
 }
 
 .hw-slider::-webkit-slider-runnable-track {
@@ -423,11 +571,25 @@
   background: var(--color-paper);
 }
 
+/* Finger-sized thumb on touch and narrow screens. */
+@media (pointer: coarse), (max-width: 767px) {
+  .hw-slider::-webkit-slider-thumb {
+    width: 28px;
+    height: 28px;
+    margin-top: -14px;
+  }
+
+  .hw-slider::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+  }
+}
+
 section[id] {
   scroll-margin-top: var(--header-h);
 }
 
-/* Last anchor can reach the header line. Short content must not skip it. */
+/* Last anchor can reach the header line. Short content must not skip it. svh: stable under the mobile URL bar. */
 #dispatch {
-  min-height: calc(100vh - var(--header-h) - 24px);
+  min-height: calc(100svh - var(--header-h) - 24px);
 }

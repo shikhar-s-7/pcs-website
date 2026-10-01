@@ -17,7 +17,11 @@ export function GridDebug() {
   const [on, setOn] = useState(false);
 
   useEffect(() => {
+    // Development and desktop only. Layout also skips mounting this in production builds.
+    if (process.env.NODE_ENV !== "development") return;
+    const desktop = window.matchMedia("(min-width: 1024px) and (hover: hover)");
     const onKey = (event: KeyboardEvent) => {
+      if (!desktop.matches) return;
       if (event.key !== "g" && event.key !== "G") return;
       if (event.metaKey || event.ctrlKey || event.altKey) return;
       if (isTypingTarget(event.target)) return;
@@ -28,11 +32,11 @@ export function GridDebug() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  if (!on) return null;
+  if (process.env.NODE_ENV !== "development" || !on) return null;
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-30">
-      <div className="mx-auto h-full w-full max-w-[90rem] px-5 md:px-8">
+      <div className="gutter mx-auto h-full w-full max-w-[90rem]">
         <div className="grid h-full grid-cols-12">
           {Array.from({ length: 12 }, (_, index) => (
             <div

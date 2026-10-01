@@ -87,9 +87,9 @@ Failure: The form could not be sent. Please try again in a few minutes.
 
 POST URL, stored base64 in that script:
 
-https://formsubmit.co/ajax/akshat@dhruvir.com
+[removed: contact endpoint]
 
-Email: akshat@dhruvir.com
+Email: hello@example.com
 
 ## Footer
 
@@ -132,4 +132,4 @@ BENGALURU / INDIA
 - `capabilities.html#compliance`
 - `capabilities.html#dispatch`
 - `contact.html`
-- `https://formsubmit.co/ajax/akshat@dhruvir.com`
+- `[removed: contact endpoint]`

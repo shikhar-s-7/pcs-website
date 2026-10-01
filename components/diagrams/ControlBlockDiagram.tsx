@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { ACCENT, MONO, arrowHead, stroke } from "@/components/diagrams/svg";
-import { useDrawOn } from "@/components/diagrams/useDrawOn";
+import { useDrawOn } from "@/hooks/useReveal";
 
 type Block = "pf" | "qv" | "zv" | "current";
 
@@ -22,9 +22,13 @@ const blocks: { id: Block; x: number; y: number; lines: string[] }[] = [
   { id: "current", x: 630, y: 95, lines: ["CURRENT", "LOOP"] },
 ];
 
+/** Shorter block labels for narrow screens, where the drawing renders at about 0.36x. */
+const short: Record<Block, string> = { pf: "P–f", qv: "Q–V", zv: "Z VIRT", current: "I LOOP" };
+
 /**
  * Outer droops set angle and magnitude. Virtual impedance shapes the
  * voltage reference. The inner current loop drives modulation.
+ * Scales with its container; never scrolls.
  */
 export function ControlBlockDiagram({ highlight, className }: ControlBlockDiagramProps) {
   const ref = useRef<SVGSVGElement>(null);
@@ -33,9 +37,12 @@ export function ControlBlockDiagram({ highlight, className }: ControlBlockDiagra
   const midY = (y: number) => y + H / 2;
 
   return (
+    <div className="@container">
     <svg
       ref={ref}
       viewBox="0 0 880 260"
+      preserveAspectRatio="xMidYMid meet"
+      style={{ width: "100%", height: "auto", display: "block" }}
       className={className}
       role="img"
       aria-label="Control block diagram: P-f droop, Q-V droop, virtual impedance, inner current loop"
@@ -74,34 +81,66 @@ export function ControlBlockDiagram({ highlight, className }: ControlBlockDiagra
         <path data-draw d={arrowHead(705, 147, "up")} />
       </g>
 
-      <g fontFamily={MONO} fontSize="11" letterSpacing="1.5" textAnchor="middle">
-        {blocks.map((block) => (
-          <text
-            key={block.id}
-            data-label
-            x={block.x + W / 2}
-            y={block.y + 22}
-            fill={block.id === highlight ? ACCENT : "currentColor"}
-          >
-            {block.lines.map((line, index) => (
-              <tspan key={line} x={block.x + W / 2} dy={index === 0 ? 0 : 15}>
-                {line}
-              </tspan>
-            ))}
-          </text>
-        ))}
+      {/* wide container */}
+      <g className="hidden @[720px]:block">
+        <g fontFamily={MONO} fontSize="12" letterSpacing="1.5" textAnchor="middle">
+          {blocks.map((block) => (
+            <text
+              key={block.id}
+              data-label
+              x={block.x + W / 2}
+              y={block.y + 22}
+              fill={block.id === highlight ? ACCENT : "currentColor"}
+            >
+              {block.lines.map((line, index) => (
+                <tspan key={line} x={block.x + W / 2} dy={index === 0 ? 0 : 15}>
+                  {line}
+                </tspan>
+              ))}
+            </text>
+          ))}
+        </g>
+
+        <g fontFamily={MONO} fontSize="12" letterSpacing="1" fill="var(--muted)">
+          <text data-label x="40" y={midY(30) - 8}>P</text>
+          <text data-label x="40" y={midY(160) - 8}>Q</text>
+          <text data-label x="280" y={midY(30) - 8}>ω, θ</text>
+          <text data-label x="280" y={midY(160) - 8}>E</text>
+          <text data-label x="572" y={midY(95) - 8}>v*</text>
+          <text data-label x="572" y={midY(95) + 18}>i*</text>
+          <text data-label x="796" y={midY(95) - 8}>m</text>
+          <text data-label x="825" y="226">i</text>
+        </g>
       </g>
 
-      <g fontFamily={MONO} fontSize="11" letterSpacing="1" fill="var(--muted)">
-        <text data-label x="40" y={midY(30) - 8}>P</text>
-        <text data-label x="40" y={midY(160) - 8}>Q</text>
-        <text data-label x="280" y={midY(30) - 8}>ω, θ</text>
-        <text data-label x="280" y={midY(160) - 8}>E</text>
-        <text data-label x="572" y={midY(95) - 8}>v*</text>
-        <text data-label x="572" y={midY(95) + 18}>i*</text>
-        <text data-label x="796" y={midY(95) - 8}>m</text>
-        <text data-label x="825" y="226">i</text>
+      {/* narrow container: larger text, shorter labels, so it stays near 10px on screen */}
+      <g className="@[720px]:hidden">
+        <g fontFamily={MONO} fontSize="32" textAnchor="middle">
+          {blocks.map((block) => (
+            <text
+              key={block.id}
+              data-label
+              x={block.x + W / 2}
+              y={block.y + H / 2 + 10}
+              fill={block.id === highlight ? ACCENT : "currentColor"}
+            >
+              {short[block.id]}
+            </text>
+          ))}
+        </g>
+
+        <g fontFamily={MONO} fontSize="30" fill="var(--muted)">
+          <text data-label x="40" y={midY(30) - 10}>P</text>
+          <text data-label x="40" y={midY(160) - 10}>Q</text>
+          <text data-label x="272" y={midY(30) - 10}>ω,θ</text>
+          <text data-label x="280" y={midY(160) - 10}>E</text>
+          <text data-label x="572" y={midY(95) - 10}>v*</text>
+          <text data-label x="572" y={midY(95) + 34}>i*</text>
+          <text data-label x="790" y={midY(95) - 10}>m</text>
+          <text data-label x="826" y="222">i</text>
+        </g>
       </g>
     </svg>
+    </div>
   );
 }

@@ -10,8 +10,8 @@ export const brand = {
   shortName: "DHRUVIR",
   /** Small line under the wordmark. Source: the existing lockup. */
   tagline: "POWER CONVERSION",
-  /** Enquiry recipient. Source: the form endpoint in the existing site script. */
-  email: "akshat@dhruvir.com",
+  /** Public contact address. Dummy until the real one is decided. */
+  email: "hello@example.com",
   /** Host of that address. */
   domain: "dhruvir.com",
   /** The source names the brand in the footer and does not name a registered entity. */

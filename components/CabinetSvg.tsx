@@ -59,9 +59,9 @@ const parts: { label: string; origin: [number, number, number]; size: [number, n
 /** Static isometric stand-in. Same five subassemblies, no motion. */
 export function CabinetSvg() {
   return (
-    <figure className="relative mx-auto w-full max-w-[90rem] px-5 py-10 md:px-8">
+    <figure className="relative mx-auto flex h-full w-full max-w-[90rem] flex-col px-5 py-6 md:px-8">
       <figcaption className="font-mono text-label text-muted">CONCEPT RENDER</figcaption>
-      <svg viewBox="0 0 640 320" className="mt-4 h-auto w-full" role="img" aria-label="Conceptual PCS cabinet">
+      <svg viewBox="0 0 640 320" className="mt-4 min-h-0 w-full flex-1" role="img" aria-label="Conceptual PCS cabinet">
         {parts.map((part) => (
           <IsoBox key={part.label} origin={part.origin} size={part.size} accent={part.label === "Converter stage"} />
         ))}

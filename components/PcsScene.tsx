@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,17 +8,17 @@ import * as THREE from "three";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const DARK = "#141311";
+const DARK = "#1b1a17";
 const EDGE = "#ff4d00";
 
 type Vec3 = [number, number, number];
 
 const PARTS: { label: string; home: Vec3; explode: Vec3 }[] = [
-  { label: "DC input", home: [0, 0.72, 0], explode: [-0.15, 1.55, 0.35] },
+  { label: "DC input", home: [0, 0.72, 0], explode: [-0.15, 1.3, 0.35] },
   { label: "Converter stage", home: [0, 0.28, 0], explode: [0.2, 0.72, 0.15] },
   { label: "LCL filter", home: [0, -0.12, 0.02], explode: [-0.1, -0.05, 0.45] },
   { label: "Control board", home: [0, -0.42, 0.08], explode: [0.35, -0.72, 0.2] },
-  { label: "AC output", home: [0, -0.72, 0], explode: [0, -1.5, 0.3] },
+  { label: "AC output", home: [0, -0.72, 0], explode: [0, -1.3, 0.3] },
 ];
 
 function Box({
@@ -132,7 +132,10 @@ function Assembly({
   progress: React.RefObject<number>;
   groups: React.RefObject<(THREE.Group | null)[]>;
 }) {
-  useFrame(() => {
+  const spin = useRef<THREE.Group>(null);
+
+  useFrame((_, delta) => {
+    if (spin.current) spin.current.rotation.y += delta * 0.18;
     const t = progress.current ?? 0;
     groups.current?.forEach((group, index) => {
       if (!group) return;
@@ -147,7 +150,7 @@ function Assembly({
   });
 
   return (
-    <group>
+    <group ref={spin} rotation={[0, -0.5, 0]}>
       {BODIES.map((Body, index) => (
         <group
           key={PARTS[index].label}
@@ -184,6 +187,8 @@ function CalloutSync({
     const box = wrap.current;
     if (!box) return;
     const width = box.clientWidth;
+    // Narrow screens list the parts below the model instead of drawing leader lines.
+    if (width < 768) return;
     const height = box.clientHeight;
     const show = (progress.current ?? 0) > 0.12 ? "1" : "0";
     groups.current?.forEach((group, index) => {
@@ -210,22 +215,37 @@ function CalloutSync({
 }
 
 export default function PcsScene() {
-  const sectionRef = useRef<HTMLElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(true);
+  const [antialias] = useState(() => (navigator.hardwareConcurrency ?? 8) > 4);
   const progress = useRef(0);
   const groups = useRef<(THREE.Group | null)[]>([]);
   const lines = useRef<(SVGLineElement | null)[]>([]);
   const labels = useRef<(HTMLDivElement | null)[]>([]);
 
+  // Stop rendering while the model is off screen.
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
+    const wrap = wrapRef.current;
+    if (!wrap || !("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver(
+      (entries) => setVisible(entries.some((entry) => entry.isIntersecting)),
+      { rootMargin: "100px 0px" },
+    );
+    observer.observe(wrap);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
+      // clamp(): assembled at page load even when the box starts on screen.
       const trigger = ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        end: "bottom bottom",
+        trigger: wrap,
+        start: "clamp(top 75%)",
+        end: "clamp(bottom 35%)",
         scrub: 0.6,
         onUpdate: (self) => {
           progress.current = self.progress;
@@ -237,18 +257,18 @@ export default function PcsScene() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-[240vh]">
-      <div
-        ref={wrapRef}
-        className="sticky top-[var(--header-h)] h-[calc(100dvh-var(--header-h))]"
-      >
+    <div ref={wrapRef} className="relative h-full w-full">
         <p className="pointer-events-none absolute top-4 left-5 z-10 font-mono text-label text-muted md:left-8">
           CONCEPT RENDER
         </p>
+        {/* Stage: the model. On narrow screens the part list sits below it. */}
+        <div ref={stageRef} className="absolute inset-x-0 top-0 bottom-36 md:bottom-0">
         <Canvas
-          camera={{ position: [3.4, 2.1, 4.6], fov: 32 }}
-          dpr={[1, 1.25]}
-          gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
+          frameloop={visible ? "always" : "never"}
+          style={{ touchAction: "pan-y" }}
+          camera={{ position: [2.6, 1.6, 3.5], fov: 34 }}
+          dpr={[1, 1.5]}
+          gl={{ antialias, alpha: true, powerPreference: "low-power" }}
           onCreated={({ camera, gl }) => {
             camera.lookAt(0, 0, 0);
             gl.setClearColor(0x000000, 0);
@@ -262,10 +282,13 @@ export default function PcsScene() {
             groups={groups}
             lines={lines}
             labels={labels}
-            wrap={wrapRef}
+            wrap={stageRef}
           />
         </Canvas>
-        <svg className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
+        <svg
+          className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
+          aria-hidden="true"
+        >
           {PARTS.map((part, index) => (
             <line
               key={part.label}
@@ -283,12 +306,20 @@ export default function PcsScene() {
             ref={(node) => {
               labels.current[index] = node;
             }}
-            className="pointer-events-none absolute top-0 left-0 font-mono text-label whitespace-nowrap text-paper opacity-0"
+            className="pointer-events-none absolute top-0 left-0 hidden font-mono text-label whitespace-nowrap text-paper opacity-0 md:block"
           >
             {part.label}
           </div>
         ))}
-      </div>
-    </section>
+        </div>
+        <ol className="gutter absolute inset-x-0 bottom-0 grid h-36 grid-cols-2 content-center gap-x-4 gap-y-2 font-mono text-label text-paper uppercase md:hidden">
+          {PARTS.map((part, index) => (
+            <li key={part.label} className="hairline-t flex gap-2 pt-2">
+              <span className="text-muted">{String(index + 1).padStart(2, "0")}</span>
+              {part.label}
+            </li>
+          ))}
+        </ol>
+    </div>
   );
 }
