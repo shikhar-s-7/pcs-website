@@ -7,7 +7,7 @@ type SectionMarkProps = {
 export function SectionMark({ index, label }: SectionMarkProps) {
   return (
     <p className="font-mono text-label text-muted uppercase">
-      <span className="text-signal">{index}</span>
+      <span className="text-signal-text">{index}</span>
       <span> / {label}</span>
     </p>
   );

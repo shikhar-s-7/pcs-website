@@ -29,11 +29,17 @@ const tableNote = specs.find((item) => item.id === "pcs-table-note");
 
 const swatches = [
   { name: "Ink", token: "--color-ink", hex: "#100f0c", className: "bg-ink" },
-  { name: "Paper", token: "--color-paper", hex: "#f2eee6", className: "bg-paper" },
+  { name: "Paper", token: "--color-paper", hex: "#e9e5db", className: "bg-paper" },
   { name: "Ash", token: "--color-ash", hex: "#c2bdb4", className: "bg-ash" },
   { name: "Stone", token: "--color-stone", hex: "#5c574f", className: "bg-stone" },
   { name: "Graphite", token: "--color-graphite", hex: "#3a3833", className: "bg-graphite" },
   { name: "Signal", token: "--color-signal", hex: "#ff4d00", className: "bg-signal" },
+  {
+    name: "Signal on paper",
+    token: "--color-signal-on-paper",
+    hex: "#b83500",
+    className: "bg-signal-on-paper",
+  },
 ] as const;
 
 function heroFigure(spec: Spec) {
@@ -44,6 +50,50 @@ function heroFigure(spec: Spec) {
     return `${spec.value} ${spec.unit}`;
   }
   return spec.value;
+}
+
+function SpecTable() {
+  return (
+    <>
+      <table className="spec-table">
+        <caption>PCS platform / preliminary design targets</caption>
+        <tbody>
+          {tableRows.map((row) => (
+            <tr key={row.id}>
+              <th scope="row">{row.label}</th>
+              <td>{row.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {tableNote ? <p className="spec-note">{tableNote.value}</p> : null}
+    </>
+  );
+}
+
+function StatBlock() {
+  return (
+    <ul className="mt-14 grid grid-cols-1 md:grid-cols-4">
+      {heroStats.map((spec) => (
+        <li
+          key={spec.id}
+          className="hairline-b py-6 md:border-b-0 md:hairline-r md:px-5 md:first:pl-0 md:last:border-r-0"
+        >
+          <p className="font-mono text-data">{heroFigure(spec)}</p>
+          <p className="mt-3 font-mono text-small tracking-normal text-muted">{spec.label}</p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function DataPair() {
+  return (
+    <>
+      <SpecTable />
+      <StatBlock />
+    </>
+  );
 }
 
 function Band({
@@ -60,7 +110,7 @@ function Band({
   children: ReactNode;
 }) {
   return (
-    <section id={id} className={paper ? "ground-paper" : undefined}>
+    <section id={id} className={paper ? "ground-paper" : "ground-ink"}>
       <Frame>
         <div className="hairline-t grid grid-cols-1 md:grid-cols-12">
           <div className="py-8 md:col-span-3 md:py-16">
@@ -125,7 +175,7 @@ export default function DesignSystemPage() {
       </Band>
 
       <Band index="02" label="COLOR" id="color">
-        <ul className="grid grid-cols-2 gap-px md:grid-cols-6">
+        <ul className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-4">
           {swatches.map((swatch) => (
             <li key={swatch.token}>
               <div className={`hairline h-20 ${swatch.className}`} />
@@ -172,40 +222,11 @@ export default function DesignSystemPage() {
       </Band>
 
       <Band index="06" label="SPEC" id="spec" paper>
-        <table className="spec-table w-full border-collapse text-left">
-          <caption className="hairline-b py-3 text-left font-mono text-small tracking-normal">
-            PCS platform / preliminary design targets
-          </caption>
-          <tbody>
-            {tableRows.map((row) => (
-              <tr key={row.id} className="hairline-b">
-                <th scope="row" className="text-muted py-3 pr-6 text-left text-small font-normal">
-                  {row.label}
-                </th>
-                <td className="py-3 font-mono text-small">{row.value}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {tableNote ? (
-          <p className="mt-4 max-w-[65ch] font-mono text-small tracking-normal text-muted">
-            {tableNote.value}
-          </p>
-        ) : null}
+        <DataPair />
       </Band>
 
-      <Band index="07" label="STATS" id="stats">
-        <ul className="grid grid-cols-1 md:grid-cols-4">
-          {heroStats.map((spec) => (
-            <li
-              key={spec.id}
-              className="hairline-b py-6 md:border-b-0 md:hairline-r md:px-5 md:first:pl-0 md:last:border-r-0"
-            >
-              <p className="font-mono text-data">{heroFigure(spec)}</p>
-              <p className="mt-3 font-mono text-small tracking-normal text-muted">{spec.label}</p>
-            </li>
-          ))}
-        </ul>
+      <Band index="07" label="INK" id="ink">
+        <DataPair />
       </Band>
 
       <Band index="08" label="INDEX" id="index">
@@ -221,19 +242,19 @@ export default function DesignSystemPage() {
         <form className="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2">
           <label className="field">
             <span>
-              Name <span className="text-signal">*</span>
+              Name <span className="text-signal-text">*</span>
             </span>
             <input name="name" type="text" autoComplete="name" required />
           </label>
           <label className="field">
             <span>
-              Work email <span className="text-signal">*</span>
+              Work email <span className="text-signal-text">*</span>
             </span>
             <input name="email" type="email" autoComplete="email" required />
           </label>
           <label className="field md:col-span-2">
             <span>
-              Interest <span className="text-signal">*</span>
+              Interest <span className="text-signal-text">*</span>
             </span>
             <select name="interest" required defaultValue="">
               <option value="" disabled>
@@ -248,7 +269,7 @@ export default function DesignSystemPage() {
           </label>
           <label className="field md:col-span-2">
             <span>
-              Project details <span className="text-signal">*</span>
+              Project details <span className="text-signal-text">*</span>
             </span>
             <textarea
               name="message"

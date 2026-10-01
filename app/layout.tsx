@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo, Barlow_Condensed, IBM_Plex_Mono } from "next/font/google";
 import { CornerMarks } from "@/components/CornerMarks";
+import { GridDebug } from "@/components/GridDebug";
 import { brand } from "@/config/brand";
 import "./globals.css";
 
@@ -40,10 +41,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${display.variable} ${sans.variable} ${mono.variable} h-full antialiased`}
+      className={`${display.variable} ${sans.variable} ${mono.variable} ground-ink h-full antialiased`}
     >
       <body className="min-h-full font-sans">
         <CornerMarks />
+        <GridDebug />
         {children}
       </body>
     </html>
