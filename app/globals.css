@@ -63,6 +63,16 @@
   --radius-lg: 2px;
 }
 
+:root {
+  --header-h: 3.75rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 @layer base {
   html {
     background: var(--color-ink);
@@ -75,6 +85,7 @@
     font-family: var(--font-sans);
     font-size: var(--text-body);
     line-height: var(--text-body--line-height);
+    padding-top: var(--header-h);
   }
 
   /* Spec columns and stat figures align. */
@@ -90,6 +101,12 @@
   :focus-visible {
     outline: 1px solid var(--color-signal);
     outline-offset: 3px;
+  }
+
+  /* Signal fill hides a signal ring. Use the ground's text color, which clears both grounds. */
+  .btn-signal:focus-visible,
+  .skip-link:focus {
+    outline-color: var(--fg);
   }
 }
 
@@ -304,7 +321,75 @@
 
 @media (prefers-reduced-motion: reduce) {
   .btn,
-  .text-link {
+  .text-link,
+  .mobile-menu {
     transition: none;
   }
+}
+
+/* Fixed bar. Opaque ink so page sections do not show through. No shadow. */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border-bottom: 1px solid var(--color-graphite);
+}
+
+.nav-link {
+  color: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.nav-link[aria-current="page"],
+.nav-link[aria-current="location"] {
+  color: var(--signal-text);
+}
+
+.mobile-menu {
+  position: fixed;
+  z-index: 40;
+  inset: var(--header-h) 0 0 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  padding: 1.5rem 1.25rem 2rem;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 70;
+  top: 0.75rem;
+  left: 0.75rem;
+  transform: translateY(-150%);
+  background: var(--color-signal);
+  color: var(--color-ink);
+  padding: 0.75rem 1rem;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+section[id] {
+  scroll-margin-top: var(--header-h);
+}
+
+/* Last anchor can reach the header line. Short content must not skip it. */
+#dispatch {
+  min-height: calc(100vh - var(--header-h) - 24px);
 }

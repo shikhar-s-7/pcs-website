@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Archivo, Barlow_Condensed, IBM_Plex_Mono } from "next/font/google";
 import { CornerMarks } from "@/components/CornerMarks";
 import { GridDebug } from "@/components/GridDebug";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SkipLink } from "@/components/SkipLink";
 import { brand } from "@/config/brand";
 import "./globals.css";
 
@@ -44,9 +47,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${display.variable} ${sans.variable} ${mono.variable} ground-ink h-full antialiased`}
     >
       <body className="min-h-full font-sans">
+        <SkipLink />
+        <SiteHeader />
         <CornerMarks />
         <GridDebug />
         {children}
+        <SiteFooter />
       </body>
     </html>
   );

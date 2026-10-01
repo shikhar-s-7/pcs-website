@@ -125,16 +125,7 @@ function Band({
 
 export default function DesignSystemPage() {
   return (
-    <main>
-      <header className="hairline-b">
-        <Frame>
-          <div className="flex items-center justify-between gap-6 py-5">
-            <Wordmark />
-            <SectionMark index="DS" label="REV 0.1" />
-          </div>
-        </Frame>
-      </header>
-
+    <main id="content" tabIndex={-1}>
       <Band index="01" label="TYPE" id="type">
         <p className="font-display text-display uppercase">
           Grid-forming is no longer optional in India.

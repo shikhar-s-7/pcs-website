@@ -1,19 +1,9 @@
 import Link from "next/link";
 import { Frame } from "@/components/Frame";
-import { SectionMark } from "@/components/SectionMark";
-import { Wordmark } from "@/components/Wordmark";
 
 export default function Home() {
   return (
-    <main>
-      <header className="hairline-b">
-        <Frame>
-          <div className="flex items-center justify-between py-5">
-            <Wordmark />
-            <SectionMark index="00" label="INDEX" />
-          </div>
-        </Frame>
-      </header>
+    <main id="content" tabIndex={-1}>
       <Frame>
         <div className="grid grid-cols-1 md:grid-cols-12">
           <div className="py-16 md:col-span-7 md:py-28">
