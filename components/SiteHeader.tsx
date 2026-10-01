@@ -41,7 +41,6 @@ function measure(): { active: string; tops: SectionTops } | null {
 
 function report(active: string, tops: SectionTops) {
   // TEMP: remove this log and the report() wrapper calls once scroll-spy is confirmed.
-  console.log({ hash: window.location.hash, active, sectionTops: tops });
 }
 
 function scrollToId(id: string, behavior: ScrollBehavior) {
@@ -72,7 +71,7 @@ export function SiteHeader() {
       if (syncHash && !scrollLock.current && window.location.hash !== `#${active}`) {
         history.replaceState(null, "", `#${active}`);
       }
-      report(active, tops);
+
     }
   };
 

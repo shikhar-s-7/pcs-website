@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { ControlBlockDiagram, SingleLineDiagram, TopoContours } from "@/components/diagrams";
 import { Frame } from "@/components/Frame";
 import { SectionMark } from "@/components/SectionMark";
 import { Wordmark } from "@/components/Wordmark";
@@ -274,6 +275,33 @@ export default function DesignSystemPage() {
             </button>
           </div>
         </form>
+      </Band>
+
+      <Band index="10" label="DIAGRAMS" id="diagrams">
+        <div className="grid grid-cols-1 gap-y-14">
+          <figure>
+            <SingleLineDiagram className="hairline h-auto w-full" />
+            <figcaption className="font-mono text-label text-muted mt-3 uppercase">
+              Single-line / schematic
+            </figcaption>
+          </figure>
+          <figure>
+            <ControlBlockDiagram highlight="zv" className="hairline h-auto w-full" />
+            <figcaption className="font-mono text-label text-muted mt-3 uppercase">
+              Control blocks / schematic
+            </figcaption>
+          </figure>
+          <figure>
+            <TopoContours seed={7} className="hairline text-stone aspect-[3/2] h-auto w-full" />
+            <figcaption className="font-mono text-label text-muted mt-3 uppercase">
+              Topographic contours / seed 7
+            </figcaption>
+          </figure>
+        </div>
+      </Band>
+
+      <Band index="11" label="DIAGRAMS / PAPER" id="diagrams-paper" paper>
+        <SingleLineDiagram highlight="transformer" className="hairline h-auto w-full" />
       </Band>
     </main>
   );
