@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capabilities | Dhruvir</title>
+<meta name="description" content="Grid-forming PCS hardware, compliance validation, and dispatch software for battery energy storage. Modular 100 kW blocks, VSG control, HIL-validated, engineered for weak grids and 50C ambients.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="grid-lines"></div>
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="index.html" aria-label="Dhruvir home">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L12 8 L16 24 L20 10 L23 16 L28 16" stroke="#f5a524" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <span>DHRUVIR<small>POWER CONVERSION</small></span>
+    </a>
+    <button class="menu-btn" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="capabilities.html" class="active">Capabilities</a></li>
+      <li><a href="contact.html">Enquiries</a></li>
+      <li><a href="contact.html" class="btn nav-cta">Start a project</a></li>
+    </ul>
+  </div>
+</header>
+<main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumb"><a href="index.html">Dhruvir</a> / Capabilities</div>
+      <div class="kicker"><span class="idx">CAP</span> Engineering capability</div>
+      <h1>Hardware, controls, and evidence.<br>Built as one system.</h1>
+      <p class="lede">Grid-forming conversion hardware, the firmware that makes it behave like a machine, and the validation trail that proves it to a regulator. Each is engineered against the others.</p>
+    </div>
+  </section>
+
+  <!-- PCS -->
+  <section class="cap-block" id="pcs">
+    <div class="wrap">
+      <div class="cap-head reveal"><span class="num">CAP / 01</span><h2>Grid-forming power conversion</h2></div>
+      <div class="cap-grid">
+        <div class="body-copy reveal">
+          <p>The Dhruvir PCS line is a <strong>modular 100 kW building block</strong> that parallels into systems from 100 kW to 5 MW, sized for the C&amp;I and small-utility segment that imported OEMs do not engineer for. At its core is a <strong>virtual synchronous generator (VSG) control stack</strong>: the converter emulates the swing equation of a synchronous machine, delivering synthetic inertia and damping instead of merely following the grid's phase.</p>
+          <p>The result is a converter that <strong>forms</strong> the grid where there is none, stabilizes it where it is weak, and transitions between grid-forming and grid-following operation without a bump in output.</p>
+          <div class="feat-grid">
+            <div class="feat"><div class="t">Synthetic inertia &amp; damping</div><div class="d">Adjustable inertia constant and power oscillation damping, tuned per site.</div></div>
+            <div class="feat"><div class="t">Black start</div><div class="d">Energizes a dead bus, including transformer inrush, without external supply.</div></div>
+            <div class="feat"><div class="t">GFM / GFL transition</div><div class="d">Seamless mode transition on grid events, with islanded voltage-source operation.</div></div>
+            <div class="feat"><div class="t">Weak-grid stability</div><div class="d">Control stability designed and tested down to SCR 1.0, where most GFM claims assume SCR 3+.</div></div>
+            <div class="feat"><div class="t">Fault ride-through</div><div class="d">Voltage and frequency ride-through windows matched to the Indian Grid Code.</div></div>
+            <div class="feat"><div class="t">Phase-jump immunity</div><div class="d">Rides through the phase jumps that trip grid-following fleets in weak pockets.</div></div>
+          </div>
+        </div>
+        <div class="reveal">
+          <table class="spec-table">
+            <tr><th colspan="2">PCS platform / preliminary design targets</th></tr>
+            <tr><td>Building block</td><td class="mono">100 kW, paralleled to 5 MW</td></tr>
+            <tr><td>DC voltage</td><td class="mono">Up to 1500 V</td></tr>
+            <tr><td>Control core</td><td class="mono">VSG (virtual synchronous generator)</td></tr>
+            <tr><td>Grid modes</td><td class="mono">GFM, GFL, islanded, black start</td></tr>
+            <tr><td>Weak-grid stability</td><td class="mono">SCR 1.0 - 1.5</td></tr>
+            <tr><td>Max efficiency</td><td class="mono">&ge; 98.5%</td></tr>
+            <tr><td>Current THD</td><td class="mono">&lt; 3% at rated power</td></tr>
+            <tr><td>Overload</td><td class="mono">1.2&times; / 10 s transient</td></tr>
+            <tr><td>Ambient</td><td class="mono">-10 to 50&deg;C, full power at 50</td></tr>
+            <tr><td>Enclosure</td><td class="mono">IP54, conformal-coated boards</td></tr>
+            <tr><td>Comms</td><td class="mono">Modbus TCP, IEC 61850, IEC 60870-5-104</td></tr>
+            <tr><td>Grid codes</td><td class="mono">IEGC, IEEE 1547, UL 1741 SB</td></tr>
+          </table>
+          <p class="spec-note">* Preliminary engineering targets, subject to type-test validation. Final values published with test reports.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPLIANCE -->
+  <section class="cap-block" id="compliance" style="background:var(--bg2)">
+    <div class="wrap">
+      <div class="cap-head reveal"><span class="num">CAP / 02</span><h2>Compliance &amp; validation lab</h2></div>
+      <div class="cap-grid">
+        <div class="reveal">
+          <div class="img-card">
+            <img src="assets/lab.jpg" alt="Hardware-in-the-loop validation bench" loading="lazy">
+            <div class="cap"><b>Real-time HIL bench</b>Control strategies proven on iron before they touch a battery</div>
+          </div>
+        </div>
+        <div class="body-copy reveal">
+          <p>The 2026 draft regulations make <strong>evidence</strong> the customer's actual problem: EMT studies at design stage, demonstrated GFM and black start at commissioning, periodic re-verification by load despatch centres. Dhruvir's lab exists to produce that evidence, for our hardware and for anyone else's.</p>
+          <p>Controls are validated on a <strong>hardware-in-the-loop bench</strong> against a real-time grid model before any site visit. When the dispatch layer or a PCS unit ships, its behavior under faults, weak grids, and islanding has already been measured, not simulated in the marketing sense.</p>
+          <div class="feat-grid">
+            <div class="feat"><div class="t">EMT models</div><div class="d">PSCAD / EMT-type and PSSE models delivered with every project, ready for utility study submission.</div></div>
+            <div class="feat"><div class="t">HIL validation</div><div class="d">Real-time simulator testing of control firmware against fault, weak-grid, and islanding scenarios.</div></div>
+            <div class="feat"><div class="t">Witnessed commissioning tests</div><div class="d">GFM, black start, and ride-through demonstrated at site, documented for the load despatch centre.</div></div>
+            <div class="feat"><div class="t">Periodic re-verification</div><div class="d">Retainer-based re-testing and reporting as regulations finalize and audits begin.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISPATCH -->
+  <section class="cap-block" id="dispatch">
+    <div class="wrap">
+      <div class="cap-head reveal"><span class="num">CAP / 03</span><h2>Dispatch &amp; asset management</h2></div>
+      <div class="cap-grid">
+        <div class="body-copy reveal">
+          <p>India has built the price signal for storage and almost none of the software to capture it. Dhruvir's dispatch layer re-solves <strong>charge and discharge per site, daily</strong>, against time-of-day tariffs, exchange prices, demand charges, and degradation cost. The asset-management layer underneath it tracks state of health, warranty compliance, and availability, the monthly discipline asset owners actually pay for.</p>
+          <p>The differentiator is the lab: <strong>dispatch and GFM-compliant control strategies are validated on real power hardware</strong> before deployment, so the control warranty we sign is backed by measurement.</p>
+          <div class="feat-grid">
+            <div class="feat"><div class="t">Dispatch optimization</div><div class="d">TOD tariffs, day-ahead and real-time prices, DSM penalty avoidance, demand-charge shaving.</div></div>
+            <div class="feat"><div class="t">Asset management</div><div class="d">SOH and degradation analytics, warranty-compliance telemetry, alarm triage, availability reporting.</div></div>
+            <div class="feat"><div class="t">Vendor-neutral</div><div class="d">Multi-OEM monitoring and control over Modbus TCP and IEC 60870-5-104. No hardware lock-in.</div></div>
+            <div class="feat"><div class="t">Aggregation-ready</div><div class="d">Fleet pooling for ancillary and discom flexibility products as those markets open.</div></div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="img-card">
+            <img src="assets/dash.jpg" alt="Dhruvir dispatch and asset management dashboard" loading="lazy">
+            <div class="cap"><b>Fleet dispatch console</b>Price-aware scheduling across distributed sites</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPLICATIONS -->
+  <section class="section" style="background:var(--bg2);border-top:1px solid var(--line)">
+    <div class="wrap">
+      <div class="kicker reveal"><span class="idx">APP</span> Where it deploys</div>
+      <h2 class="reveal" style="margin-bottom:44px">Built for the segments imports ignore.</h2>
+      <div class="apps reveal">
+        <div class="app"><div class="t">C&amp;I battery storage</div><div class="d">100 kW to 5 MW behind-the-meter systems needing tariff optimization, backup, and GFM compliance without utility-scale budgets.</div></div>
+        <div class="app"><div class="t">EV charging hubs</div><div class="d">Storage-buffered fast charging where grid connections are weak and demand charges are punishing.</div></div>
+        <div class="app"><div class="t">Solar-plus-storage</div><div class="d">Co-located storage meeting the mandatory-storage and GFM clauses of the 2026 connectivity framework.</div></div>
+        <div class="app"><div class="t">Weak-grid RE plants</div><div class="d">Renewable sites in low-SCR pockets facing the 15% grid-forming quota from July 2027.</div></div>
+        <div class="app"><div class="t">Microgrids &amp; islands</div><div class="d">Voltage-source operation, black start, and seamless transition for industrial microgrids and islanded systems.</div></div>
+        <div class="app"><div class="t">BESS integrators</div><div class="d">Certified GFM control firmware and compliance evidence for integrators assembling containers from imported cells.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section tight">
+    <div class="wrap">
+      <div class="cta-band reveal">
+        <div class="kicker"><span class="idx">NEXT</span> Start a project</div>
+        <h2>Bring us the grid problem your current vendor can't solve.</h2>
+        <p>PCS supply, compliance evidence, or dispatch software. One engineering team, one business-day response.</p>
+        <a href="contact.html" class="btn solid">Send an enquiry <span class="arr">-></span></a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col" style="max-width:280px">
+        <a class="logo" href="index.html" style="margin-bottom:14px">
+          <svg width="26" height="26" viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L12 8 L16 24 L20 10 L23 16 L28 16" stroke="#f5a524" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>
+          <span>DHRUVIR<small>POWER CONVERSION</small></span>
+        </a>
+        <p style="font-size:.82rem;color:var(--muted);margin-top:12px">Grid-forming power conversion, compliance validation, and dispatch software for battery energy storage.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Site</h4>
+        <a href="index.html">Overview</a>
+        <a href="capabilities.html">Capabilities</a>
+        <a href="contact.html">Enquiries</a>
+      </div>
+      <div class="foot-col">
+        <h4>Capabilities</h4>
+        <a href="capabilities.html#pcs">Grid-forming PCS</a>
+        <a href="capabilities.html#compliance">Compliance &amp; validation</a>
+        <a href="capabilities.html#dispatch">Dispatch software</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <a href="contact.html">Enquiry form</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; 2026 DHRUVIR. ALL RIGHTS RESERVED.</span>
+      <span>BENGALURU / INDIA</span>
+    </div>
+  </div>
+</footer>
+<script src="assets/main.js"></script>
+</body>
+</html>

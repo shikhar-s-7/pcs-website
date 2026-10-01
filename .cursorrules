@@ -1,0 +1,47 @@
+You are building the website for an early-stage company developing grid-forming,
+VSG-enabled power conversion systems (PCS). Audience: utility/microgrid engineers,
+EPCs, investors.
+
+STACK: Next.js App Router, TypeScript, Tailwind, GSAP + ScrollTrigger,
+react-three-fiber/drei (one 3D object only), static export (output:'export'),
+deployed to Surge. No server-only features.
+
+CONTENT: All copy, numbers, specs and claims come from /content (extracted from the
+company's existing site). Display them exactly as given: same values, same units.
+Do not round, reword, flag, "verify", or replace them. Do not add claims that aren't
+in /content. Every stat reads from /content/specs.ts so there is one place to edit.
+Use [PLACEHOLDER] only for things that don't exist in the source (e.g. photos).
+
+BRAND IS PROVISIONAL: the company name will change. Never hardcode it. All brand
+strings (name, shortName, tagline, email, domain, legal entity) live in
+/config/brand.ts and are imported everywhere, including metadata. The logo is a
+<Wordmark/> type-only SVG driven by that config. Body copy says "the system", "the
+platform" or "we", not the name. The name appears only in header, footer, metadata,
+legal.
+
+ART DIRECTION: a blend of teenage.engineering and anduril.com.
+- Dark near-black base with a warm off-white alternate section. One signal accent
+  (safety orange or hazard yellow), used sparingly.
+- Visible 12-col grid, 1px hairlines, corner registration marks, radii 0-2px.
+- Huge uppercase/condensed display type, left-aligned. Mono for all data, labels,
+  indexes ("01 / TECHNOLOGY", "REV 0.1"). Do NOT use Inter or Space Grotesk as
+  the display face. Suggested: Archivo / Barlow Condensed display, IBM Plex Mono data.
+- HUD/telemetry details only where they carry real or clearly illustrative info.
+- Blunt, declarative copy. Short sentences. Numbers over adjectives.
+
+NO PHOTOS EXIST. No stock photos, AI images, or generic abstract art. Do NOT reuse
+the AI-looking images from /reference. Visuals are: live simulations, SVG schematics and
+isometric line drawings, generative topographic contours, and one Three.js concept model.
+Simulations and the 3D model get a small mono label ("ILLUSTRATIVE SIMULATION" /
+"CONCEPT RENDER"). The company's real numbers are displayed plainly with no label.
+Create an <ImageSlot/> component (labelled placeholder with aspect ratio, caption,
+"PHOTO PENDING") so real photography can drop in later with no layout change.
+
+BANNED: purple/blue gradients, glassmorphism, glow blobs, gradient text, emoji,
+3-icon feature grids, centered hero with subtitle + two buttons, rounded shadowed cards,
+lorem ipsum, "revolutionize / empower / unleash / seamless" copy.
+
+MOTION: GSAP, purposeful, 0.4-0.9s, expo/power2 out, no scroll-hijacking, honor
+prefers-reduced-motion via gsap.matchMedia, kill triggers on unmount, no layout shift.
+
+Before coding, state a short plan. After, list what changed.

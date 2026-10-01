@@ -1,0 +1,269 @@
+@import "tailwindcss";
+
+/*
+  Near-black ground, warm paper, three greys, one signal.
+  Ash is secondary text on ink. Stone is secondary text and rules on paper.
+  Graphite is the hairline on ink. Safety orange is the only accent:
+  index numerals, the primary action, focus, and the corner ticks.
+  Radii stop at 2px. Nothing in the scale can become a pill.
+*/
+@theme {
+  --color-ink: #100f0c;
+  --color-paper: #f2eee6;
+  --color-ash: #c2bdb4;
+  --color-stone: #5c574f;
+  --color-graphite: #3a3833;
+  --color-signal: #ff4d00;
+
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-ground: var(--ground);
+
+  --font-display: var(--font-barlow-condensed), "Arial Narrow", sans-serif;
+  --font-sans: var(--font-archivo), Arial, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
+
+  --text-display: clamp(3.25rem, 8vw, 6.75rem);
+  --text-display--line-height: 0.84;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 500;
+
+  --text-title: clamp(2rem, 4vw, 3.25rem);
+  --text-title--line-height: 0.9;
+  --text-title--letter-spacing: -0.015em;
+  --text-title--font-weight: 500;
+
+  --text-heading: 1.5rem;
+  --text-heading--line-height: 1;
+  --text-heading--letter-spacing: 0.01em;
+  --text-heading--font-weight: 500;
+
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.55;
+  --text-body--font-weight: 400;
+
+  --text-small: 0.9375rem;
+  --text-small--line-height: 1.45;
+
+  --text-label: 0.6875rem;
+  --text-label--line-height: 1.35;
+  --text-label--letter-spacing: 0.14em;
+  --text-label--font-weight: 500;
+
+  --text-data: clamp(1.75rem, 3vw, 2.5rem);
+  --text-data--line-height: 1;
+  --text-data--letter-spacing: -0.03em;
+  --text-data--font-weight: 500;
+
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+}
+
+@layer base {
+  html {
+    /* Semantic colors flip together when a section switches to paper. */
+    --ground: var(--color-ink);
+    --fg: var(--color-paper);
+    --muted: var(--color-ash);
+    --line: var(--color-graphite);
+    background: var(--ground);
+    color: var(--fg);
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  /* Spec columns and stat figures align. */
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-signal);
+    outline-offset: 3px;
+  }
+}
+
+/* Paper sections remap text and rules. Raw swatches stay on --color-*. */
+.ground-paper {
+  --ground: var(--color-paper);
+  --fg: var(--color-ink);
+  --muted: var(--color-stone);
+  --line: var(--color-stone);
+  background: var(--ground);
+  color: var(--fg);
+  color-scheme: light;
+}
+
+/* 1px rules. Color follows --line, so the same class works on both grounds. */
+@utility hairline {
+  border: 1px solid var(--line);
+}
+
+@utility hairline-t {
+  border-top: 1px solid var(--line);
+}
+
+@utility hairline-b {
+  border-bottom: 1px solid var(--line);
+}
+
+@utility hairline-l {
+  border-left: 1px solid var(--line);
+}
+
+@utility hairline-r {
+  border-right: 1px solid var(--line);
+}
+
+@utility grid-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+@layer components {
+  /* Mono, 2px corner, no shadow. Hover swaps color only. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    line-height: 1;
+    text-transform: uppercase;
+    transition:
+      background-color 160ms ease,
+      color 160ms ease,
+      border-color 160ms ease;
+  }
+
+  .btn-signal {
+    background: var(--color-signal);
+    color: var(--color-ink);
+  }
+
+  .btn-signal:hover {
+    background: var(--fg);
+    color: var(--ground);
+  }
+
+  .btn-line {
+    background: transparent;
+    color: var(--fg);
+    border-color: var(--line);
+  }
+
+  .btn-line:hover {
+    border-color: var(--color-signal);
+    color: var(--color-signal);
+  }
+
+  .text-link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--line);
+    text-underline-offset: 0.28em;
+    transition:
+      color 160ms ease,
+      text-decoration-color 160ms ease;
+  }
+
+  .text-link:hover {
+    color: var(--color-signal);
+    text-decoration-color: var(--color-signal);
+  }
+
+  /* Underline fields, not boxes. Label is mono; the value is the body face. */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    background: transparent;
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.45;
+    text-transform: none;
+    padding: 0.55rem 0;
+  }
+
+  .field textarea {
+    min-height: 7rem;
+    resize: vertical;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: var(--muted);
+    opacity: 1;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-bottom-color: var(--color-signal);
+  }
+
+  /* Two columns on a wide sheet. Stacked on a narrow one so values stay whole. */
+  .spec-table td {
+    text-align: right;
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .spec-table th,
+  .spec-table td {
+    display: block;
+    width: 100%;
+    padding-right: 0;
+    text-align: left;
+  }
+
+  .spec-table td {
+    padding-top: 0.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .text-link {
+    transition: none;
+  }
+}
